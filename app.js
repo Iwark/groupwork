@@ -26,7 +26,7 @@ app.configure('development', function(){
 server.listen(app.get('port'))
 
 var webSocketServer = new WSServer({ httpServer: server });
-var accept = ['localhost', '127.0.0.1'];
+var accept = ['localhost', '127.0.0.1', '172.16.201.22'];
 
 webSocketServer.on('request', function(req){
 	req.origin = req.origin || '*';
