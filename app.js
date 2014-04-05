@@ -2,6 +2,10 @@ var http = require('http');
 var WSServer = require('websocket').server;
 var url = require('url');
 
+var mongo = require('mongodb');
+var mongoServer = new mongo.Server('localhost', 27017);
+var mongoClient = new mongo.Db('quotes', mongoServer);
+
 var plainHttpServer = http.createServer(function(req, res){
 		res.writeHead(200, { 'Content-Type': 'text/html' });
         console.log("aaa");
