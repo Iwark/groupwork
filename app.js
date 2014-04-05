@@ -2,28 +2,14 @@
  * Module dependencies.
  */
  
-var express = require('express');
+var http = require('http');
 var WSServer = require('websocket').server;
 var url = require('url');
-var path = require('path');
  
-var app = express();
-var server = require('http').createServer(app);
- 
-app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-});
- 
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
- 
-server.listen(app.get('port'))
+var plainHttpServer = http.createServer(function(req, res){
+	res.writeHead(200, { 'Content-Type': 'text/html' });
+	res.end('Hello');
+}).listen(8080);
 
 var webSocketServer = new WSServer({ httpServer: server });
 var accept = ['localhost', '127.0.0.1', '172.16.201.22'];
