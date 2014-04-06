@@ -36,7 +36,7 @@ var plainHttpServer = http.createServer(function(req, res){
         res.end('Hello');
 }).listen(8080);
 
-var wss = new WSServer({ port: 8081 });
+var wss = new WSServer({ host:"0.0.0.0", port: 8081 });
 
 var connections = [];
 
