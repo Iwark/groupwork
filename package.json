@@ -6,7 +6,7 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "mongodb": "*",
+    "mongoose": "*",
     "websocket": "*"
   }
 }
