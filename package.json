@@ -7,6 +7,6 @@
   },
   "dependencies": {
     "mongoose": "*",
-    "websocket": "*"
+    "ws": "*"
   }
 }
