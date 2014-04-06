@@ -67,7 +67,8 @@ wss.on('connection', function(ws){
           });
           sendData.user = user;
         }
-        websocket.send(sendData);
+        console.log("send:::"+JSON.stringify(sendData));
+        ws.send(JSON.stringify(sendData));
       });
     }
   });
