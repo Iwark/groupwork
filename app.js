@@ -34,7 +34,7 @@ var Trolley = mongoose.model('Trolley');
 var plainHttpServer = http.createServer(function(req, res){
 	res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end('Hello');
-}).listen(3000);
+}).listen(8080);
 
 var webSocketServer = new WSServer({ httpServer: plainHttpServer });
 var accept = ['localhost', '127.0.0.1', '172.16.201.22'];
