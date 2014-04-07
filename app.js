@@ -67,7 +67,7 @@ wss.on('connection', function(ws){
       });
     }else if(data.hasOwnProperty('ride_trolley')){
       var sendData = {};
-      if(data.ride_trolley.hasOwnProperty('_id'){
+      if(data.ride_trolley.hasOwnProperty('_id')){
         Trolley.findOne({ _id: data.ride_trolley._id}, function(err, trolley){
           if(!err){
             User.findOne({ _id:data.user_id}, function(err, user){
