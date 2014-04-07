@@ -4,23 +4,11 @@ var url = require('url');
 
 var mongoose = require('mongoose');
 
+var schema = require('./schema.js');
+
 // 定義フェーズ
-var Schema = mongoose.Schema;
-
-var UserSchema = new Schema({
-  name: {type:String, default: '新入り' },
-  facebook: String
-});
-
-var TrolleySchema = new Schema({
-  current_num: {type: Number, default:0},
-  users: [UserSchema],
-  sec: {type: Number, default:5},
-  corrects: {type: Number, default:0}
-});
-
-mongoose.model('User', UserSchema);
-mongoose.model('Trolley', TrolleySchema);
+mongoose.model('User', schema.user);
+mongoose.model('Trolley', schema.trolley);
 
 // 使用フェーズ
 mongoose.connect('mongodb://localhost/trolley_quiz');
