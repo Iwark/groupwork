@@ -1,0 +1,79 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install' ]
+2 info using npm@1.4.6
+3 info using node@v0.10.26
+4 verbose node symlink /usr/local/bin/node
+5 verbose readDependencies using package.json deps
+6 verbose install where, deps [ '/Users/intern/node', [ 'mongoose', 'ws', 'fs' ] ]
+7 info preinstall TrolleyQuiz@0.0.1
+8 verbose readDependencies using package.json deps
+9 verbose cache add [ 'fs@*', null ]
+10 verbose cache add name=undefined spec="fs@*" args=["fs@*",null]
+11 verbose parsed url { protocol: null,
+11 verbose parsed url   slashes: null,
+11 verbose parsed url   auth: null,
+11 verbose parsed url   host: null,
+11 verbose parsed url   port: null,
+11 verbose parsed url   hostname: null,
+11 verbose parsed url   hash: null,
+11 verbose parsed url   search: null,
+11 verbose parsed url   query: null,
+11 verbose parsed url   pathname: 'fs@*',
+11 verbose parsed url   path: 'fs@*',
+11 verbose parsed url   href: 'fs@*' }
+12 verbose cache add name="fs" spec="*" args=["fs","*"]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: '*',
+13 verbose parsed url   path: '*',
+13 verbose parsed url   href: '*' }
+14 verbose addNamed [ 'fs', '*' ]
+15 verbose addNamed [ null, '*' ]
+16 verbose already installed skipping mongoose@* /Users/intern/node
+17 verbose already installed skipping ws@* /Users/intern/node
+18 silly lockFile d8bf140d-fs fs@*
+19 verbose lock fs@* /Users/intern/.npm/d8bf140d-fs.lock
+20 silly addNameRange { name: 'fs', range: '*', hasData: false }
+21 verbose url raw fs
+22 verbose url resolving [ 'https://registry.npmjs.org/', './fs' ]
+23 verbose url resolved https://registry.npmjs.org/fs
+24 info trying registry request attempt 1 at 20:01:47
+25 http GET https://registry.npmjs.org/fs
+26 http 404 https://registry.npmjs.org/fs
+27 silly registry.get cb [ 404,
+27 silly registry.get   { date: 'Mon, 07 Apr 2014 11:01:48 GMT',
+27 silly registry.get     server: 'CouchDB/1.6.0+build.fauxton-91-g5a2864b (Erlang OTP/R14B04)',
+27 silly registry.get     'content-type': 'application/json',
+27 silly registry.get     via: '1.1 varnish',
+27 silly registry.get     'cache-control': 'max-age=0',
+27 silly registry.get     'content-length': '52',
+27 silly registry.get     'accept-ranges': 'bytes',
+27 silly registry.get     age: '0',
+27 silly registry.get     'x-served-by': 'cache-v44-ASH, cache-ty68-TYO',
+27 silly registry.get     'x-cache': 'MISS, MISS',
+27 silly registry.get     'x-cache-hits': '0, 0',
+27 silly registry.get     'x-timer': 'S1396868507.809642315,VS0,VS86,VE191,VE274',
+27 silly registry.get     'keep-alive': 'timeout=10, max=50',
+27 silly registry.get     connection: 'Keep-Alive' } ]
+28 silly lockFile d8bf140d-fs fs@*
+29 silly lockFile d8bf140d-fs fs@*
+30 error 404 'fs' is not in the npm registry.
+30 error 404 You should bug the author to publish it
+30 error 404 It was specified as a dependency of 'TrolleyQuiz'
+30 error 404
+30 error 404 Note that you can also install from a
+30 error 404 tarball, folder, or http url, or git url.
+31 error System Darwin 13.1.0
+32 error command "node" "/usr/local/bin/npm" "install"
+33 error cwd /Users/intern/node
+34 error node -v v0.10.26
+35 error npm -v 1.4.6
+36 error code E404
+37 verbose exit [ 1, true ]
