@@ -39,16 +39,16 @@ wss.on('connection', function(ws){
   ws.on('message', function(msg){
     console.log('"' + msg + '"を受信');
     var data = JSON.parse(msg);
-    if(data.hasOwnProperty('user')){
-      User.find({ facebook: data.user.facebook }, function(err, docs) {
+    if(data.hasOwnProperty('login')){
+      User.find({ facebook: data.login.facebook }, function(err, docs) {
         var sendData = {};
         if(docs.length > 0){
           sendData.user = docs[0];
-        }else if(data.user.hasOwnProperty('facebook') &&
-          data.user.facebook.length > 0){
+        }else if(data.login.hasOwnProperty('facebook') &&
+          data.login.facebook.length > 0){
           var user = new User({
-            name: data.user.name,
-            facebook: data.user.facebook
+            name: data.login.name,
+            facebook: data.login.facebook
           });
           user.save(function(err){
             if(err) console.log(err);
@@ -57,6 +57,11 @@ wss.on('connection', function(ws){
         }
         console.log("send:::"+JSON.stringify(sendData));
         ws.send(JSON.stringify(sendData));
+      });
+    }else if(data.hasOwnProperty('get_trolley')){
+      Trolley.find({ }, function(err, docs) {
+        console.log("send:::"+JSON.stringify(docs));
+        ws.send(JSON.stringify(docs));
       });
     }
   });
