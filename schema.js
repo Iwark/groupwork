@@ -6,6 +6,7 @@ var UserSchema = new Schema({
   facebook: String
 });
 var TrolleySchema = new Schema({
+  category: {type: String, default:'' },
   current_num: {type: Number, default:0},
   users: [UserSchema],
   sec: {type: Number, default:5},

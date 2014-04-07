@@ -65,6 +65,50 @@ wss.on('connection', function(ws){
         console.log("send:::"+JSON.stringify(sendData));
         ws.send(JSON.stringify(sendData));
       });
+    }else if(data.hasOwnProperty('ride_trolley')){
+      var sendData = {};
+      if(data.ride_trolley.hasOwnProperty('_id'){
+        Trolley.findOne({ _id: data.ride_trolley._id}, function(err, trolley){
+          if(!err){
+            User.findOne({ _id:data.user_id}, function(err, user){
+              if(!err){
+                trolley.users.push(user);
+                sendData.trolley = trolley;
+                ws.send(JSON.stringify(sendData));
+              }else{
+                console.log('error findOneUser: '+err);
+              }
+            });
+            
+          }else{
+            console.log('error findOneTrolley: '+err);
+          }
+        });
+
+      }else{
+        //新しいトロッコの生成
+        var trolley = new Trolley({
+          category: data.ride_trolley.category,
+          current_num: 0,
+          sec: 5,
+          corrects: 0
+        });
+        User.findOne({ _id:data.user_id}, function(err, user){
+          if(!err){
+            trolley.users.push(user);
+            trolley.save(function(err){
+              if(err) console.log(err);
+              else{
+                sendData.trolley = trolley;
+                ws.send(JSON.stringify(sendData));
+              }
+            });
+          }else{
+            console.log('error findOneUser: '+err);
+          }
+        });
+        
+      }
     }
   });
 });
