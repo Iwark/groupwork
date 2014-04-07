@@ -58,10 +58,12 @@ wss.on('connection', function(ws){
         console.log("send:::"+JSON.stringify(sendData));
         ws.send(JSON.stringify(sendData));
       });
-    }else if(data.hasOwnProperty('get_trolley')){
+    }else if(data.hasOwnProperty('get_trolleys')){
       Trolley.find({ }, function(err, docs) {
-        console.log("send:::"+JSON.stringify(docs));
-        ws.send(JSON.stringify(docs));
+        var sendData = {};
+        sendData.trolleys = docs;
+        console.log("send:::"+JSON.stringify(sendData));
+        ws.send(JSON.stringify(sendData));
       });
     }
   });
