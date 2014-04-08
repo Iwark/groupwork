@@ -1,5 +1,5 @@
 module.exports={
-  loginUser: function(err, user, login){
+  loginUser: function(User, err, user, login){
     var sendData = {};
     if(err){
       console.log('error loginUser:'+err);

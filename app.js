@@ -47,11 +47,11 @@ wss.on('connection', function(ws){
       var sendData;
       if(data.login.hasOwnProperty('facebook')){
         User.findOne({ facebook: data.login.facebook }, function(err, user) {
-          ws.send(JSON.stringify(actions.loginUser(err, user, data.login)));
+          ws.send(JSON.stringify(actions.loginUser(User, err, user, data.login)));
         });
       }else if(data.login.hasOwnProperty('device_id')){
         User.findOne({ device_id: data.login.device_id },function(err, user){
-          ws.send(JSON.stringify(actions.loginUser(err, user, data.login)));
+          ws.send(JSON.stringify(actions.loginUser(User, err, user, data.login)));
         });
       }
     }else if(data.hasOwnProperty('get_trolleys')){
