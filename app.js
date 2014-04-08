@@ -1,54 +1,42 @@
-var http = require('http');
-var WSServer = require('ws').Server;
-var url = require('url');
-
+//モデル作成
 var mongoose = require('mongoose');
-
 var schema = require('./schema.js');
-
-var fs = require('fs');
-var lineList = fs.readFileSync('QuizList.csv').toString().split('\r\n');
-lineList.shift();
-var quizKeyList = ['index','category','contents','correct_answer','wrong_answer'];
-var quizes=[[],[],[],[],[],[]];
-while(lineList.length){
-  var line = lineList.shift();
-  console.log(line);
-  var doc = {};
-  line.split(',').forEach(function (entry, i) {
-    doc[quizKeyList[i]] = entry;
-  });
-  quizes[doc.category-1].push(doc);
+for (var key in schema){
+  mongoose.model(key, schema[key]);
 }
-console.log(quizes[0]);
-
-// 定義フェーズ
-mongoose.model('User', schema.user);
-mongoose.model('Trolley', schema.trolley);
-
-// 使用フェーズ
-mongoose.connect('mongodb://localhost/trolley_quiz');
-
 var User = mongoose.model('User');
 var Trolley = mongoose.model('Trolley');
+mongoose.connect('mongodb://localhost/trolley_quiz');
 
-// var mongoServer = new mongo.Server('localhost', 27017);
-// var mongoClient = new mongo.Db('quotes', mongoServer);
+var actions = require('./actions.js');
 
+// クイズの読み込み
+var quizes = require('./quizes.js');
+
+var http = require('http');
 var plainHttpServer = http.createServer(function(req, res){
 	res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end('Hello');
+  res.end('Hello');
 }).listen(8080);
 
+var WSServer = require('ws').Server;
 var wss = new WSServer({ port: 8081 });
 
-var connections = [];
+var clients = [];
 
 wss.on('connection', function(ws){
-  connections.push(ws);
+  clients.push({ socket: ws });
+  //ログアウト
   ws.on('close',function(){
-    connections = connections.filter(function(conn, i){
-      return (conn === ws) ? false : true;
+    clients = clients.filter(function(client, index){
+      if(client.socket === ws){
+        if(client.hasOwnProperty('user_id')){
+          actions.removeUserFromTrolley(User, client.user_id);
+        }
+        return false;
+      }else{
+        return true;
+      }
     });
   });
 
@@ -89,18 +77,25 @@ wss.on('connection', function(ws){
             User.findOne({ _id:data.user_id}, function(err, user){
               if(!err){
                 trolley.users.push(user);
-                sendData.trolley = trolley;
-                ws.send(JSON.stringify(sendData));
+                trolley.save(function(err){
+                  if(err) console.log(err);
+                  else{
+                    user.trolley_id = trolley._id;
+                    user.save(function(err){
+                      console.log('error savingUser: '+err);
+                    });
+                    sendData.trolley = trolley;
+                    ws.send(JSON.stringify(sendData));
+                  }
+                });
               }else{
                 console.log('error findOneUser: '+err);
               }
             });
-            
           }else{
             console.log('error findOneTrolley: '+err);
           }
         });
-
       }else{
         //新しいトロッコの生成
         var trolley = new Trolley({
@@ -115,6 +110,10 @@ wss.on('connection', function(ws){
             trolley.save(function(err){
               if(err) console.log(err);
               else{
+                user.trolley_id = trolley._id;
+                user.save(function(err){
+                  console.log('error savingUser: '+err);
+                });
                 sendData.trolley = trolley;
                 ws.send(JSON.stringify(sendData));
               }
@@ -123,7 +122,6 @@ wss.on('connection', function(ws){
             console.log('error findOneUser: '+err);
           }
         });
-        
       }
     }
   });

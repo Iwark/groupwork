@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
   name: {type:String, default: '新入り' },
+  trolley_id: Schema.ObjectId,
   facebook: String
 });
 var TrolleySchema = new Schema({
@@ -14,6 +15,6 @@ var TrolleySchema = new Schema({
 });
 
 module.exports = {
-  user: UserSchema,
-  trolley: TrolleySchema
+  User: UserSchema,
+  Trolley: TrolleySchema
 };
