@@ -44,24 +44,16 @@ wss.on('connection', function(ws){
     console.log('"' + msg + '"を受信');
     var data = JSON.parse(msg);
     if(data.hasOwnProperty('login')){
-      User.find({ facebook: data.login.facebook }, function(err, docs) {
-        var sendData = {};
-        if(docs.length > 0){
-          sendData.user = docs[0];
-        }else if(data.login.hasOwnProperty('facebook') &&
-          data.login.facebook.length > 0){
-          var user = new User({
-            name: data.login.name,
-            facebook: data.login.facebook
-          });
-          user.save(function(err){
-            if(err) console.log(err);
-          });
-          sendData.user = user;
-        }
-        console.log("send:::"+JSON.stringify(sendData));
-        ws.send(JSON.stringify(sendData));
-      });
+      var sendData;
+      if(data.login.hasOwnProperty('facebook')){
+        User.findOne({ facebook: data.login.facebook }, function(err, user) {
+          ws.send(JSON.stringify(actions.loginUser(err, user, data.login)));
+        });
+      }else if(data.login.hasOwnProperty('device_id')){
+        User.findOne({ device_id: data.login.device_id },function(err, user){
+          ws.send(JSON.stringify(actions.loginUser(err, user, data.login)));
+        });
+      }
     }else if(data.hasOwnProperty('get_trolleys')){
       Trolley.find({ }, function(err, docs) {
         var sendData = {};
