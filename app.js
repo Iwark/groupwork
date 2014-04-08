@@ -7,7 +7,6 @@ for (var key in schema){
 var User = mongoose.model('User');
 var Trolley = mongoose.model('Trolley');
 mongoose.connect('mongodb://localhost/trolley_quiz');
-User.remove();
 var actions = require('./actions.js');
 
 // クイズの読み込み
@@ -45,7 +44,7 @@ wss.on('connection', function(ws){
     var data = JSON.parse(msg);
     if(data.hasOwnProperty('login')){
       if(!data.login.hasOwnProperty('name') || !data.login.name){
-        data.login.name = schema['User'].name.default;
+        data.login.name = '新入り';
       }
       var sendData;
       if(data.login.hasOwnProperty('facebook')){
