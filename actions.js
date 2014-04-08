@@ -4,14 +4,12 @@ module.exports={
     if(err){
       console.log('error loginUser:'+err);
     }else if(user){
-      console.log('1:'+user);
       sendData.user = user;
     }else if(login.hasOwnProperty('facebook') && login.facebook.length > 0){
       user = new User({
         name: login.name,
         facebook: login.facebook
       });
-      console.log('2:'+user);
       user.save(function(err){
         if(err) console.log('error saving user:'+err);
       });
@@ -21,7 +19,6 @@ module.exports={
         name: login.name,
         device_id: login.device_id
       });
-      console.log('3:'+user);
       user.save(function(err){
         if(err) console.log('error saving user:'+err);
       });
