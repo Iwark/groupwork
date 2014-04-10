@@ -99,7 +99,7 @@ module.exports={
             for(var i = 0; i < trolley.users.length; i++){
               console.log(trolley.users[i]._id);
               console.log("|" + trolley.users[i]._id + "|" + client.user_id + "|");
-              if(trolley.users[i]._id == client.user_id){
+              if(String(trolley.users[i]._id) == String(client.user_id)){
                 console.log("一緒だろおい");
                 return true;
               } 
