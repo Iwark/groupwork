@@ -59,10 +59,16 @@ wss.on('connection', function(ws){
       if(data.login.hasOwnProperty('facebook')){
         User.findOne({ facebook: data.login.facebook }, function(err, user) {
           ws.send(JSON.stringify(actions.loginUser(User, err, user, data.login)));
+          clients.forEach(function(client){
+            if(client.socket === ws) client.user = user;
+          });
         });
       }else if(data.login.hasOwnProperty('device_id')){
         User.findOne({ device_id: data.login.device_id },function(err, user){
           ws.send(JSON.stringify(actions.loginUser(User, err, user, data.login)));
+          clients.forEach(function(client){
+            if(client.socket === ws) client.user = user;
+          });
         });
       }
     }else if(data.hasOwnProperty('get_trolleys')){
@@ -118,7 +124,7 @@ wss.on('connection', function(ws){
               else{
                 user.trolley_id = trolley._id;
                 user.save(function(err){
-                  if(!err) console.log('error savingUser: '+err);
+                  if(err) console.log('error savingUser: '+err);
                 });
                 actions.getNextQuiz(Trolley,trolley._id,quizes,function(tr){
                   sendData.trolley = tr;
