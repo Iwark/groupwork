@@ -98,7 +98,10 @@ module.exports={
             console.log(client.user_id);
             for(var i = 0; i < trolley.users.length; i++){
               console.log(trolley.users[i]._id);
-              if(trolley.users[i]._id == client.user_id) return true;
+              if(trolley.users[i]._id == client.user_id){
+                console.log("一緒だろおい");
+                return true;
+              } 
             }
           }
           return false;
