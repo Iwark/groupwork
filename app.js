@@ -76,7 +76,7 @@ wss.on('connection', function(ws){
                   else{
                     user.trolley_id = trolley._id;
                     user.save(function(err){
-                      console.log('error savingUser: '+err);
+                      if(err) console.log('error savingUser: '+err);
                     });
                     sendData.trolley = trolley;
                     ws.send(JSON.stringify(sendData));
