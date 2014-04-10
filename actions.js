@@ -95,7 +95,9 @@ module.exports={
         console.log(clients);
         tr_clients = clients.filter(function(client, index){
           if(client.hasOwnProperty('user_id')){
+            console.log(client.user_id);
             for(var i = 0; i < trolley.users.length; i++){
+              console.log(trolley.users[i]._id);
               if(trolley.users[i]._id == client.user_id) return true;
             }
           }
