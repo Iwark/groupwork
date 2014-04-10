@@ -9,6 +9,8 @@ var Trolley = mongoose.model('Trolley');
 mongoose.connect('mongodb://localhost/trolley_quiz');
 var actions = require('./actions.js');
 
+Trolley.remove();
+
 // クイズの読み込み
 var quizes = require('./quizes.js');
 
@@ -130,64 +132,54 @@ wss.on('connection', function(ws){
         });
       }
     }else if(data.hasOwnProperty('reply_answer')){
-      if(data.reply_answer.hasOwnProperty('trolley_id')){
-        Trolley.findOne({ _id: data.reply_answer.trolley_id }, function(err, trolley){
+      if(data.reply_answer.hasOwnProperty('user_id')){
+        User.findOne({ _id: data.reply_answer.user_id}, function(err, user){
           if(!err){
-            if(data.reply_answer.hasOwnProperty('result')){
-              if(data.reply_answer.result == "correct"){
-                trolley.corrects++;
-                if(data.reply_answer.hasOwnProperty('user_id')){
-                  User.findOne({ _id: data.reply_answer.user_id}, function(err, user){
+            Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
+              if(!err){
+                if(data.reply_answer.hasOwnProperty('result')){
+                  if(data.reply_answer.result == "correct"){
+                    trolley.corrects++;
+                    user.corrects[trolley.quiz.category-1] ++;
+                  }else{
+                    trolley.wrongs++;
+                    user.wrongs[trolley.quiz.category-1] ++;
+                  }
+                  trolley.save(function(err){
                     if(!err){
-                      user.corrects[trolley.quiz.category-1] ++;
-                    }else{
-                      console.log("err finding one user:"+err);
+                      if(trolley.corrects + trolley.wrongs == trolley.users.length){
+                        var sendData = {};
+                        if(trolley.corrects > trolly.users.length / 2 ){
+                          actions.getNextQuiz(Trolley,trolley._id,quizes,function(tr){
+                            sendData.result = "correct";
+                            sendData.trolley = tr;
+                            actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
+                              console.log('sent to users in trolley correct.');
+                            });
+                          });
+                        }else if(trolley.wrongs > trolly.users.length / 2 ){
+                          sendData.result = "wrong";
+                          sendData.trolley = trolley;
+                          actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
+                            console.log('sent to users in trolley wrong.');
+                          });
+                        }else{
+                          sendData.result = "same";
+                          sendData.trolley = trolley;
+                          actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
+                            console.log('sent to users in trolley same.');
+                          });
+                        }
+                      }
                     }
                   });
                 }
               }else{
-                trolley.wrongs++;
-                if(data.reply_answer.hasOwnProperty('user_id')){
-                  User.findOne({ _id: data.reply_answer.user_id}, function(err, user){
-                    if(!err){
-                      user.wrongs[trolley.quiz.category-1] ++;
-                    }else{
-                      console.log("err finding one user:"+err);
-                    }
-                  });
-                }
+                console.log('error findOneTrolley: '+err);
               }
-              trolley.save(function(err){
-                if(!err){
-                  if(trolley.corrects + trolley.wrongs == trolley.users.length){
-                    var sendData = {};
-                    if(trolley.corrects > trolly.users.length / 2 ){
-                      actions.getNextQuiz(Trolley,trolley._id,quizes,function(tr){
-                        sendData.result = "correct";
-                        sendData.trolley = tr;
-                        actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
-                          console.log('sent to users in trolley correct.');
-                        });
-                      });
-                    }else if(trolley.wrongs > trolly.users.length / 2 ){
-                      sendData.result = "wrong";
-                      sendData.trolley = trolley;
-                      actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
-                        console.log('sent to users in trolley wrong.');
-                      });
-                    }else{
-                      sendData.result = "same";
-                      sendData.trolley = trolley;
-                      actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
-                        console.log('sent to users in trolley same.');
-                      });
-                    }
-                  }
-                }
-              });
-            }
+            });
           }else{
-            console.log('error findOneTrolley: '+err);
+            console.log('error findOneUser: '+err);
           }
         });
       }
@@ -213,14 +205,22 @@ wss.on('connection', function(ws){
         });
       }
     }else if(data.hasOwnProperty('send_message')){
-      if(data.send_message.hasOwnProperty('trolley_id')){
+      if(data.send_message.hasOwnProperty('user_id')){
         var sendData = {};
         if(data.send_message.hasOwnProperty('message')) 
           sendData.message = data.send_message.message;
         else if(data.send_message.hasOwnProperty('emotion'))
           sendData.emotion = data.send_message.emotion;
-        actions.sendMessageToTrolley(data.send_message.trolley_id,clients,JSON.stringify(sendData),function(){
-          console.log('sent message to users in trolley same.');
+
+        User.findOne({ _id: data.send_message.user_id },function(err, user){
+          if(!err){
+            sendData.user = user;
+            actions.sendMessageToTrolley(user.trolley_id,clients,JSON.stringify(sendData),function(){
+              console.log('sent message to users in trolley same.');
+            });
+          }else{
+            console.log("err finding user:"+err);
+          }
         });
       }
     }else if(data.hasOwnProperty('is_continue')){
@@ -231,10 +231,10 @@ wss.on('connection', function(ws){
             sendData.trolley = tr;
             ws.send(JSON.stringify(sendData));
           });
-        }else if(data.is_continue.hasOwnProperty('user_id') && data.is_continue.hasOwnProperty('trolley_id')){
+        }else if(data.is_continue.hasOwnProperty('user_id')){
           User.findOne({ _id: user_id },function(err, user){
             if(!err){
-              Trolley.findOne({ _id: data.is_continue.trolley_id }, function(err, trolley){
+              Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
                 if(!err){
                   user.money += trolley.current_num * 500;
                   user.save(function(err){
