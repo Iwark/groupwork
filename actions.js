@@ -38,8 +38,12 @@ module.exports={
               if(u._id === user_id) return false;
               else return true;
             });
-            if(trolley.users.length == 0) trolley.remove();
-            else trolley.save(function(err){
+            if(trolley.users.length == 0){
+              console.log('トロッコ除去');
+              trolley.remove();
+              user.trolley_id = null;
+              user.save(function(err){});
+            }else trolley.save(function(err){
               if(!err){
                 user.trolley_id = null;
                 user.save(function(err){});
