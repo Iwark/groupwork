@@ -92,6 +92,7 @@ module.exports={
   sendMessageToTrolley: function(Trolley, trolley_id, clients, message, cb){
     Trolley.findOne({ _id: trolley_id }, function(err, trolley){
       if(!err){
+        console.log(clients);
         tr_clients = clients.filter(function(client, index){
           if(client.hasOwnProperty('user_id')){
             for(var i = 0; i < trolley.users.length; i++){
@@ -100,6 +101,7 @@ module.exports={
           }
           return false;
         });
+        console.log(tr_clients);
         tr_clients.forEach(function(client){
           client.socket.send(message);
         });
