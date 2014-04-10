@@ -42,6 +42,10 @@ wss.on('connection', function(ws){
     });
   });
 
+  ws.on('error',function(){
+    console.log("error!");
+  });
+
   ws.on('message', function(msg){
     console.log('"' + msg + '"を受信');
     var data = JSON.parse(msg);
