@@ -35,7 +35,7 @@ wss.on('connection', function(ws){
         console.log("ws found.");
         if(client.hasOwnProperty('user_id')){
           console.log("user found.");
-          actions.removeUserFromTrolley(User, client.user_id);
+          actions.removeUserFromTrolley(User, Trolley, client.user_id);
         }
         return false;
       }else{
@@ -245,7 +245,7 @@ wss.on('connection', function(ws){
                   user.money += trolley.current_num * 500;
                   user.save(function(err){
                     if(!err){
-                      actions.removeUserFromTrolley(User,user._id);
+                      actions.removeUserFromTrolley(User, Trolley, user._id);
                       var sendData = {};
                       sendData.continue_result = "OK";
                       ws.send(JSON.stringify(sendData));

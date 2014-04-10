@@ -29,7 +29,7 @@ module.exports={
     console.log("send:::"+JSON.stringify(sendData));
     return sendData;
   },
-  removeUserFromTrolley: function(User, user_id){
+  removeUserFromTrolley: function(User, Trolley, user_id){
     User.findOne({ _id: user_id}, function(err, user){
       if(!err && user.trolley_id){
         Trolley.findOne({ _id: user.trolley_id}, function(err, trolley){
