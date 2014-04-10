@@ -9,7 +9,7 @@ var Trolley = mongoose.model('Trolley');
 mongoose.connect('mongodb://localhost/trolley_quiz');
 var actions = require('./actions.js');
 
-Trolley.remove({},function(){});
+// Trolley.remove({},function(){});
 
 // クイズの読み込み
 var quizes = require('./quizes.js');
@@ -153,20 +153,20 @@ wss.on('connection', function(ws){
                           actions.getNextQuiz(Trolley,trolley._id,quizes,function(tr){
                             sendData.result = "correct";
                             sendData.trolley = tr;
-                            actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
+                            actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
                               console.log('sent to users in trolley correct.');
                             });
                           });
                         }else if(trolley.wrongs > trolly.users.length / 2 ){
                           sendData.result = "wrong";
                           sendData.trolley = trolley;
-                          actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
+                          actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
                             console.log('sent to users in trolley wrong.');
                           });
                         }else{
                           sendData.result = "same";
                           sendData.trolley = trolley;
-                          actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
+                          actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
                             console.log('sent to users in trolley same.');
                           });
                         }
@@ -195,7 +195,7 @@ wss.on('connection', function(ws){
                 if(!err){
                   var sendData = {};
                   sendData.trolley = trolley;
-                  actions.sendMessageToTrolley(trolley._id,clients,JSON.stringify(sendData),function(){
+                  actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
                     console.log('sent trolley to users in trolley same.');
                   });
                 }
@@ -215,7 +215,7 @@ wss.on('connection', function(ws){
         User.findOne({ _id: data.send_message.user_id },function(err, user){
           if(!err){
             sendData.user = user;
-            actions.sendMessageToTrolley(user.trolley_id,clients,JSON.stringify(sendData),function(){
+            actions.sendMessageToTrolley(Trolley, user.trolley_id,clients,JSON.stringify(sendData),function(){
               console.log('sent message to users in trolley same.');
             });
           }else{

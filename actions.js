@@ -89,7 +89,7 @@ module.exports={
       }
     });
   },
-  sendMessageToTrolley: function(trolley_id, clients, message, cb){
+  sendMessageToTrolley: function(Trolley, trolley_id, clients, message, cb){
     Trolley.findOne({ _id: trolley_id }, function(err, trolley){
       if(!err){
         tr_clients = clients.filter(function(client, index){
