@@ -27,9 +27,12 @@ wss.on('connection', function(ws){
   clients.push({ socket: ws });
   //ログアウト
   ws.on('close',function(){
+    console.log("client is closed.");
     clients = clients.filter(function(client, index){
       if(client.socket === ws){
+        console.log("ws found.");
         if(client.hasOwnProperty('user_id')){
+          console.log("user found.");
           actions.removeUserFromTrolley(User, client.user_id);
         }
         return false;
