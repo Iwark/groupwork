@@ -9,7 +9,7 @@ var Trolley = mongoose.model('Trolley');
 mongoose.connect('mongodb://localhost/trolley_quiz');
 var actions = require('./actions.js');
 
-// Trolley.remove({},function(){});
+Trolley.remove({},function(){});
 
 // クイズの読み込み
 var quizes = require('./quizes.js');
