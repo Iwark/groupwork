@@ -74,6 +74,7 @@ module.exports={
         trolley.corrects = 0;
         trolley.current_num++;
         trolley.updated_at = Date.now();
+        trolley.quiz = quiz;
         trolley.save(function(err){
           if(!err){
             cb(trolley);
