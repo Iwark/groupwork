@@ -67,7 +67,7 @@ wss.on('connection', function(ws){
         User.findOne({ device_id: data.login.device_id },function(err, user){
           ws.send(JSON.stringify(actions.loginUser(User, err, user, data.login)));
           clients.forEach(function(client){
-            if(client.socket === ws) client.user = user;
+            if(client.socket === ws) client.user_id = user._id;
           });
         });
       }
