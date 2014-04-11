@@ -111,7 +111,7 @@ wss.on('connection', function(ws){
           if(!err && trolley){
             User.findOne({ _id:data.user_id}, function(err, user){
               if(!err){
-                trolley.users.push(user);
+                trolley.users.push(user._id);
                 trolley.save(function(err){
                   if(err) console.log(err);
                   else{
@@ -144,7 +144,7 @@ wss.on('connection', function(ws){
         });
         User.findOne({ _id:data.user_id}, function(err, user){
           if(!err && user){
-            trolley.users.push(user);
+            trolley.users.push(user._id);
             trolley.save(function(err){
               if(err) console.log(err);
               else{
@@ -221,32 +221,30 @@ wss.on('connection', function(ws){
     }else if(data.hasOwnProperty('move_character')){
       if(data.move_character.hasOwnProperty('user_id')){
         User.findOne({ _id: data.move_character.user_id }, function(err, user){
-          if(data.move_character.hasOwnProperty('x')) user.x = data.move_character.x;
-          if(data.move_character.hasOwnProperty('y')) user.y = data.move_character.y;
-          if(data.move_character.hasOwnProperty('z')) user.z = data.move_character.z;
-          user.save(function(err){
-            if(!err){
-              Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
-                if(!err && trolley){
-                  for(var i = 0; i<trolley.users.length; i++){
-                    if(String(trolley.users[i]._id) == String(user._id)){
-                      // console.log("i:"+i);
-                      trolley.users[i] = user;
-                    }
-                  }
-                  trolley.save(function(err){
-                    if(!err){
-                      var sendData = {};
-                      sendData.trolley = trolley;
-                      actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
-                        // console.log('sent trolley to users in trolley same.');
+          if(!err && user){
+            if(data.move_character.hasOwnProperty('x')) user.x = data.move_character.x;
+            if(data.move_character.hasOwnProperty('y')) user.y = data.move_character.y;
+            if(data.move_character.hasOwnProperty('z')) user.z = data.move_character.z;
+            user.save(function(err){
+              if(!err){
+                Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
+                  if(!err && trolley){
+                    var sendData = {};
+                    sendData.trolley = trolley;
+                    sendData.users = [];
+                    for(var i = 0; i < trolley.users.length; i++){
+                      User.findOne({ _id: trolley.users[i]}, function(err, u){
+                        if(!err && u) sendData.users.push(u);
                       });
-                    }else console.log("err : " + err);
-                  });
-                }
-              });
-            }
-          });
+                    }
+                    actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
+                      // console.log('sent trolley to users in trolley same.');
+                    });
+                  }
+                });
+              }
+            });
+          }else console.log("some error happens");
         });
       }
     }else if(data.hasOwnProperty('send_message')){

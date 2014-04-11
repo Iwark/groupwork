@@ -28,7 +28,7 @@ module.exports={
         Trolley.findOne({ _id: user.trolley_id}, function(err, trolley){
           if(!err && trolley){
             trolley.users = trolley.users.filter(function(u, i){
-              if(u._id === user_id) return false;
+              if(String(u) === String(user_id)) return false;
               else return true;
             });
             if(trolley.users.length == 0){
@@ -89,7 +89,7 @@ module.exports={
         tr_clients = clients.filter(function(client, index){
           if(client.hasOwnProperty('user_id')){
             for(var i = 0; i < trolley.users.length; i++){
-              if(String(trolley.users[i]._id) == String(client.user_id)){
+              if(String(trolley.users[i]) == String(client.user_id)){
                 return true;
               } 
             }

@@ -16,7 +16,7 @@ var UserSchema = new Schema({
 var TrolleySchema = new Schema({
   category: {type: Number, default:0 },          //カテゴリー
   current_num: {type: Number, default:0},         //今何問目？
-  users: [UserSchema],                            //乗っているユーザー
+  users: [{type: Schema.ObjectId, unique: true}], //乗っているユーザー
   updated_at: {type: Number, default:Date.now()}, //問題更新時刻
   sec: {type: Number, default:5},
   quiz: {                                         //クイズ
