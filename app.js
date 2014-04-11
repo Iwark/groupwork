@@ -108,7 +108,7 @@ wss.on('connection', function(ws){
       var sendData = {};
       if(data.ride_trolley.hasOwnProperty('_id') && data.ride_trolley._id){
         Trolley.findOne({ _id: data.ride_trolley._id}, function(err, trolley){
-          if(!err){
+          if(!err && trolley){
             User.findOne({ _id:data.user_id}, function(err, user){
               if(!err){
                 trolley.users.push(user);
@@ -143,7 +143,7 @@ wss.on('connection', function(ws){
           wrongs: 0
         });
         User.findOne({ _id:data.user_id}, function(err, user){
-          if(!err){
+          if(!err && user){
             trolley.users.push(user);
             trolley.save(function(err){
               if(err) console.log(err);
@@ -166,9 +166,9 @@ wss.on('connection', function(ws){
     }else if(data.hasOwnProperty('reply_answer')){
       if(data.reply_answer.hasOwnProperty('user_id')){
         User.findOne({ _id: data.reply_answer.user_id}, function(err, user){
-          if(!err){
+          if(!err && user){
             Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
-              if(!err){
+              if(!err && trolley){
                 if(data.reply_answer.hasOwnProperty('result')){
                   if(data.reply_answer.result == "correct"){
                     trolley.corrects++;
@@ -224,7 +224,7 @@ wss.on('connection', function(ws){
           user.save(function(err){
             if(!err){
               Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
-                if(!err){
+                if(!err && trolley){
                   var sendData = {};
                   sendData.trolley = trolley;
                   actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
@@ -245,7 +245,7 @@ wss.on('connection', function(ws){
           sendData.emotion = data.send_message.emotion;
 
         User.findOne({ _id: data.send_message.user_id },function(err, user){
-          if(!err){
+          if(!err && user){
             sendData.user = user;
             actions.sendMessageToTrolley(Trolley, user.trolley_id,clients,JSON.stringify(sendData),function(){
               console.log('sent message to users in trolley same.');
@@ -265,9 +265,9 @@ wss.on('connection', function(ws){
           });
         }else if(data.is_continue.hasOwnProperty('user_id')){
           User.findOne({ _id: user_id },function(err, user){
-            if(!err){
+            if(!err && user){
               Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
-                if(!err){
+                if(!err && trolley){
                   user.money += trolley.current_num * 500;
                   user.save(function(err){
                     if(!err){
