@@ -26,7 +26,7 @@ var TrolleySchema = new Schema({
     correct_answer: {type: String, default: ''},    //正答
     wrong_answer: {type:String, default: ''}        //誤答
   },
-  correct_way: {type: Number, default:0},         //正解ルート 左:0 右:1                                     
+  correct_way: {type: Number, default:0},         //正解ルート 左:1 右:2                                     
   history: [Number],                                //クイズ出題履歴（quiz.index）
   corrects: {type: Number, default:0},            //その問題の正答数
   wrongs: {type:Number, default:0}                //その問題の誤答数
