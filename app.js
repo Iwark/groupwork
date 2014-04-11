@@ -225,10 +225,20 @@ wss.on('connection', function(ws){
             if(!err){
               Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
                 if(!err && trolley){
-                  var sendData = {};
-                  sendData.trolley = trolley;
-                  actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
-                    console.log('sent trolley to users in trolley same.');
+                  for(var i = 0; i<trolley.users.length; i++){
+                    if(trolley.users[i].hasOwnProperty('_id') && trolley.users[i]._id == user._id){
+                      trolley.users[i] = user;
+                      break;
+                    }
+                  }
+                  trolley.save(function(err){
+                    if(!err){
+                      var sendData = {};
+                      sendData.trolley = trolley;
+                      actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
+                        console.log('sent trolley to users in trolley same.');
+                      });
+                    }else console.log("err : " + err);
                   });
                 }
               });
