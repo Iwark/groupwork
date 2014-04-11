@@ -230,7 +230,7 @@ wss.on('connection', function(ws){
                 if(!err && trolley){
                   for(var i = 0; i<trolley.users.length; i++){
                     if(String(trolley.users[i]._id) == String(user._id)){
-                      console.log("i:"+i);
+                      // console.log("i:"+i);
                       trolley.users[i] = user;
                     }
                   }
