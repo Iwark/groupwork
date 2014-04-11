@@ -117,10 +117,10 @@ wss.on('connection', function(ws){
                   else{
                     Trolley.findOne({ _id: user.trolley_id}, function(err, tr){
                       if(!err && tr){
-                        tr.users = tr.users.filter(u,i){
+                        tr.users = tr.users.filter(function(u,i){
                           if(String(u) == String(user._id)) return false;
                           else return true;
-                        }
+                        });
                         if(tr.users.length == 0) tr.remove();
                         else tr.save(function(err){});
                       }
