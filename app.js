@@ -177,6 +177,9 @@ wss.on('connection', function(ws){
                     trolley.wrongs++;
                     user.wrongs[trolley.quiz.category-1] ++;
                   }
+                  user.save(function(err){
+                    if(err) console.log("err saving user ...");
+                  });
                   trolley.save(function(err){
                     if(!err){
                       if(trolley.corrects + trolley.wrongs == trolley.users.length){
