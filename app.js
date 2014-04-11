@@ -120,6 +120,13 @@ wss.on('connection', function(ws){
                       if(err) console.log('error savingUser: '+err);
                     });
                     sendData.trolley = trolley;
+                    sendData.users = [];
+                    for(var i = 0; i < trolley.users.length; i++){
+                      User.findOne({ _id: trolley.users[i]}, function(err, u){
+                        if(!err && u) sendData.users.push(u);
+                      });
+                    }
+
                     ws.send(JSON.stringify(sendData));
                   }
                 });
