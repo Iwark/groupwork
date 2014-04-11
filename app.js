@@ -58,17 +58,43 @@ wss.on('connection', function(ws){
       var sendData;
       if(data.login.hasOwnProperty('facebook')){
         User.findOne({ facebook: data.login.facebook }, function(err, user) {
-          ws.send(JSON.stringify(actions.loginUser(User, err, user, data.login)));
-          clients.forEach(function(client){
-            if(client.socket === ws) client.user = user;
-          });
+          if(!err && user){
+            sendData.user = user;
+            ws.send(JSON.stringify(sendData));
+            clients.forEach(function(client){
+              if(client.socket === ws) client.user_id = user._id;
+            });
+            console.log("send:::"+JSON.stringify(sendData));
+          }else if(!err){
+            actions.createUser(User, login, function(user){
+              sendData.user = user;
+              ws.send(JSON.stringify(sendData));
+              clients.forEach(function(client){
+                if(client.socket === ws) client.user_id = user._id;
+              });
+              console.log("send:::"+JSON.stringify(sendData));
+            });
+          }else console.log("error login:"+err);
         });
       }else if(data.login.hasOwnProperty('device_id')){
         User.findOne({ device_id: data.login.device_id },function(err, user){
-          ws.send(JSON.stringify(actions.loginUser(User, err, user, data.login)));
-          clients.forEach(function(client){
-            if(client.socket === ws) client.user_id = user._id;
-          });
+          if(!err && user){
+            sendData.user = user;
+            ws.send(JSON.stringify(sendData));
+            clients.forEach(function(client){
+              if(client.socket === ws) client.user_id = user._id;
+            });
+            console.log("send:::"+JSON.stringify(sendData));
+          }else if(!err){
+            actions.createUser(User, login, function(user){
+              sendData.user = user;
+              ws.send(JSON.stringify(sendData));
+              clients.forEach(function(client){
+                if(client.socket === ws) client.user_id = user._id;
+              });
+              console.log("send:::"+JSON.stringify(sendData));
+            });
+          }else console.log("error login:"+err);
         });
       }
     }else if(data.hasOwnProperty('get_trolleys')){
