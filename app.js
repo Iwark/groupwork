@@ -238,6 +238,7 @@ wss.on('connection', function(ws){
                     if(!err){
                       var sendData = {};
                       sendData.trolley = trolley;
+                      console.log("sending:"+clients,JSON.stringify(sendData));
                       actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
                         console.log('sent trolley to users in trolley same.');
                       });
