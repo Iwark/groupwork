@@ -226,6 +226,7 @@ wss.on('connection', function(ws){
               Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
                 if(!err && trolley){
                   for(var i = 0; i<trolley.users.length; i++){
+                    console.log(trolley.users[i]._id+":"+user._id);
                     if(trolley.users[i].hasOwnProperty('_id') && trolley.users[i]._id == user._id){
                       trolley.users[i] = user;
                       console.log("saving user");
