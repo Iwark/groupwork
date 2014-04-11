@@ -121,13 +121,19 @@ wss.on('connection', function(ws){
                     });
                     sendData.trolley = trolley;
                     sendData.users = [];
+                    var done = 0;
                     for(var i = 0; i < trolley.users.length; i++){
                       User.findOne({ _id: trolley.users[i]}, function(err, u){
-                        if(!err && u) sendData.users.push(u);
+                        if(!err && u){
+                          sendData.users.push(u);
+                          done ++;
+                          if(done == trolley.users.length){
+                            ws.send(JSON.stringify(sendData));
+                            console.log("sending::" + JSON.stringify(sendData));
+                          }
+                        }
                       });
                     }
-
-                    ws.send(JSON.stringify(sendData));
                   }
                 });
               }else{
