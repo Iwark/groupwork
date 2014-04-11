@@ -76,6 +76,7 @@ module.exports={
         var quiz = rest_quizes[Math.floor(Math.random()*rest_quizes.length)];
         trolley.history.push(quiz.index);
         trolley.corrects = 0;
+        trolley.correct_way = Math.floor(Math.random(2));
         trolley.current_num++;
         trolley.updated_at = Date.now();
         trolley.quiz = quiz;
