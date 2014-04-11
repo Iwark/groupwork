@@ -120,12 +120,12 @@ wss.on('connection', function(ws){
                       if(err) console.log('error savingUser: '+err);
                     });
                     sendData.trolley = trolley;
-                    sendData.users = [];
+                    sendData.users = [user];
                     var done = 0;
                     for(var i = 0; i < trolley.users.length; i++){
                       User.findOne({ _id: trolley.users[i]}, function(err, u){
                         if(!err && u){
-                          sendData.users.push(u);
+                          if(u !== user) sendData.users.push(u);
                           done ++;
                           if(done == trolley.users.length){
                             ws.send(JSON.stringify(sendData));
