@@ -228,6 +228,7 @@ wss.on('connection', function(ws){
                   for(var i = 0; i<trolley.users.length; i++){
                     if(trolley.users[i].hasOwnProperty('_id') && trolley.users[i]._id == user._id){
                       trolley.users[i] = user;
+                      console.log("saving user");
                       break;
                     }
                   }
