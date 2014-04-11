@@ -115,6 +115,16 @@ wss.on('connection', function(ws){
                 trolley.save(function(err){
                   if(err) console.log(err);
                   else{
+                    Trolley.findOne({ _id: user.trolley_id}, function(err, tr){
+                      if(!err && tr){
+                        tr.users = tr.users.filter(u,i){
+                          if(String(u) == String(user._id)) return false;
+                          else return true;
+                        }
+                        if(tr.users.length == 0) tr.remove();
+                        else tr.save(function(err){});
+                      }
+                    });
                     user.trolley_id = trolley._id;
                     user.save(function(err){
                       if(err) console.log('error savingUser: '+err);
