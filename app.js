@@ -144,6 +144,7 @@ wss.on('connection', function(ws){
                     user.save(function(err){
                       if(err) console.log('error savingUser: '+err);
                     });
+                    trolley.current_time = Date.now();
                     sendData.trolley = trolley;
                     sendData.users = [user];
                     var done = 0;
@@ -174,7 +175,7 @@ wss.on('connection', function(ws){
         var trolley = new Trolley({
           category: parseInt(data.ride_trolley.category),
           current_num: 0,
-          sec: 5,
+          current_time: Date.now(),
           updated_at: Date.now(),
           history: [],
           corrects: 0,
@@ -219,6 +220,7 @@ wss.on('connection', function(ws){
                   user.save(function(err){
                     if(err) console.log("err saving user ...");
                   });
+                  trolley.current_time = Date.now();
                   trolley.save(function(err){
                     if(!err){
                       if(trolley.corrects + trolley.wrongs == trolley.users.length){
@@ -269,6 +271,7 @@ wss.on('connection', function(ws){
                 Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
                   if(!err && trolley){
                     var sendData = {};
+                    trolley.current_time = Date.now();
                     sendData.trolley = trolley;
                     sendData.users = [user];
                     var done = 0;
