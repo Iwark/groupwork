@@ -189,20 +189,20 @@ wss.on('connection', function(ws){
                             sendData.result = "correct";
                             sendData.trolley = tr;
                             actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
-                              console.log('sent to users in trolley correct.');
+                              // console.log('sent to users in trolley correct.');
                             });
                           });
                         }else if(trolley.wrongs > trolley.users.length / 2 ){
                           sendData.result = "wrong";
                           sendData.trolley = trolley;
                           actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
-                            console.log('sent to users in trolley wrong.');
+                            // console.log('sent to users in trolley wrong.');
                           });
                         }else{
                           sendData.result = "same";
                           sendData.trolley = trolley;
                           actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
-                            console.log('sent to users in trolley same.');
+                            // console.log('sent to users in trolley same.');
                           });
                         }
                       }
@@ -238,9 +238,8 @@ wss.on('connection', function(ws){
                     if(!err){
                       var sendData = {};
                       sendData.trolley = trolley;
-                      console.log("sending:"+clients,JSON.stringify(sendData));
                       actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
-                        console.log('sent trolley to users in trolley same.');
+                        // console.log('sent trolley to users in trolley same.');
                       });
                     }else console.log("err : " + err);
                   });
@@ -262,7 +261,7 @@ wss.on('connection', function(ws){
           if(!err && user){
             sendData.user = user;
             actions.sendMessageToTrolley(Trolley, user.trolley_id,clients,JSON.stringify(sendData),function(){
-              console.log('sent message to users in trolley same.');
+              // console.log('sent message to users in trolley same.');
             });
           }else{
             console.log("err finding user:"+err);
