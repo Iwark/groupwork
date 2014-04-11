@@ -98,11 +98,20 @@ wss.on('connection', function(ws){
         });
       }
     }else if(data.hasOwnProperty('get_trolleys')){
-      Trolley.find({ }, function(err, docs) {
-        var sendData = {};
-        sendData.trolleys = docs;
-        console.log("send:::"+JSON.stringify(sendData));
-        ws.send(JSON.stringify(sendData));
+      Trolley.find({ 
+        $or: [
+          { "updated_at": {"$gte":Date.now()-12}, "current_num":1 }, 
+          { "updated_at": {"$gte":Date.now()-15, "lte":Date.now()-8 }, 
+          "current_num" : {"$gte":1} }
+        ]}, function(err, docs) {
+          if(!err){
+            var sendData = {};
+            sendData.trolleys = docs;
+            console.log("send:::"+JSON.stringify(sendData));
+            ws.send(JSON.stringify(sendData));
+          }else{
+            console.log("err:::"+err);
+          }
       });
     }else if(data.hasOwnProperty('ride_trolley')){
       var sendData = {};
