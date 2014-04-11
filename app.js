@@ -100,9 +100,15 @@ wss.on('connection', function(ws){
     }else if(data.hasOwnProperty('get_trolleys')){
       Trolley.find({ 
         $or: [
-          { "updated_at"  : {"$gte":Date.now()-7000}, "current_num":1 }, 
-          { "updated_at"  : {"$gte":Date.now()-15000, "$lte":Date.now()-8000 }, 
-            "current_num" : {"$gte":1} }
+          { $and: [
+            { "updated_at" : { "$gte":Date.now()-8000 } },
+            { "current_num":1 }
+          ] },
+          { $and: [
+            { "updated_at" : { "$gte":Date.now()-15000 } },
+            { "updated_at" : { "$lte":Date.now()-8000  } }, 
+            { "current_num": { "$gte":1 } }
+          ] }
         ]}, function(err, docs) {
           if(!err){
             var sendData = {};
