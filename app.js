@@ -101,7 +101,7 @@ wss.on('connection', function(ws){
       Trolley.find({ 
         $or: [
           { "updated_at": {"$gte":Date.now()-12}, "current_num":1 }, 
-          { "updated_at": {"$gte":Date.now()-15, "lte":Date.now()-8 }, 
+          { "updated_at": {"$gte":Date.now()-15, "$lte":Date.now()-8 }, 
           "current_num" : {"$gte":1} }
         ]}, function(err, docs) {
           if(!err){
