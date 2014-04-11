@@ -181,7 +181,7 @@ wss.on('connection', function(ws){
                     if(!err){
                       if(trolley.corrects + trolley.wrongs == trolley.users.length){
                         var sendData = {};
-                        if(trolley.corrects > trolly.users.length / 2 ){
+                        if(trolley.corrects > trolley.users.length / 2 ){
                           actions.getNextQuiz(Trolley,trolley._id,quizes,function(tr){
                             sendData.result = "correct";
                             sendData.trolley = tr;
@@ -189,7 +189,7 @@ wss.on('connection', function(ws){
                               console.log('sent to users in trolley correct.');
                             });
                           });
-                        }else if(trolley.wrongs > trolly.users.length / 2 ){
+                        }else if(trolley.wrongs > trolley.users.length / 2 ){
                           sendData.result = "wrong";
                           sendData.trolley = trolley;
                           actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
