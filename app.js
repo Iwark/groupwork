@@ -245,15 +245,21 @@ wss.on('connection', function(ws){
                   if(!err && trolley){
                     var sendData = {};
                     sendData.trolley = trolley;
-                    sendData.users = [];
+                    sendData.users = [user];
+                    var done = 0;
                     for(var i = 0; i < trolley.users.length; i++){
                       User.findOne({ _id: trolley.users[i]}, function(err, u){
-                        if(!err && u) sendData.users.push(u);
+                        if(!err && u){
+                          if(u !== user) sendData.users.push(u);
+                          done ++;
+                          if(done == trolley.users.length){
+                            actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
+                              // console.log('sent trolley to users in trolley same.');
+                            });
+                          }
+                        }
                       });
                     }
-                    actions.sendMessageToTrolley(Trolley, trolley._id,clients,JSON.stringify(sendData),function(){
-                      // console.log('sent trolley to users in trolley same.');
-                    });
                   }
                 });
               }
