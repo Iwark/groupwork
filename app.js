@@ -55,7 +55,7 @@ wss.on('connection', function(ws){
       if(!data.login.hasOwnProperty('name') || !data.login.name){
         data.login.name = '新入り';
       }
-      var sendData;
+      var sendData = {};
       if(data.login.hasOwnProperty('facebook')){
         User.findOne({ facebook: data.login.facebook }, function(err, user) {
           if(!err && user){
