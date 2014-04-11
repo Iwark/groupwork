@@ -66,7 +66,7 @@ wss.on('connection', function(ws){
             });
             console.log("send:::"+JSON.stringify(sendData));
           }else if(!err){
-            actions.createUser(User, login, function(user){
+            actions.createUser(User, data.login, function(user){
               sendData.user = user;
               ws.send(JSON.stringify(sendData));
               clients.forEach(function(client){
@@ -86,7 +86,7 @@ wss.on('connection', function(ws){
             });
             console.log("send:::"+JSON.stringify(sendData));
           }else if(!err){
-            actions.createUser(User, login, function(user){
+            actions.createUser(User, data.login, function(user){
               sendData.user = user;
               ws.send(JSON.stringify(sendData));
               clients.forEach(function(client){
