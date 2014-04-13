@@ -317,7 +317,7 @@ wss.on('connection', function(ws){
     }else if(data.hasOwnProperty('is_continue')){
       if(data.is_continue.hasOwnProperty('result')){
         if(data.is_continue.result == "true" && data.is_continue.hasOwnProperty('user_id')){
-          User.findOne({ _id: user_id },function(err, user){
+          User.findOne({ _id: data.is_continue.user_id },function(err, user){
             if(!err && user){
               actions.getNextQuiz(Trolley,user.trolley_id,quizes,function(tr){
                 var sendData = {};
@@ -327,7 +327,7 @@ wss.on('connection', function(ws){
             }else console.log("err finding user");
           });
         }else if(data.is_continue.hasOwnProperty('user_id')){
-          User.findOne({ _id: user_id },function(err, user){
+          User.findOne({ _id: data.is_continue.user_id },function(err, user){
             if(!err && user){
               Trolley.findOne({ _id: user.trolley_id }, function(err, trolley){
                 if(!err && trolley){
