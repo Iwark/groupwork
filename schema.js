@@ -11,7 +11,7 @@ var UserSchema = new Schema({
   z: {type:Number, default: 0},
   corrects: [Number],                                   //カテゴリごとの正答数
   wrongs: [Number],                                     //カテゴリごとの誤答数
-  money: {type:Number, default: 0}
+  money: {type:Number, default: 3000}
 });
 var TrolleySchema = new Schema({
   category: {type: Number, default:0 },          //カテゴリー
