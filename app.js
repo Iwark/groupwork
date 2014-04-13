@@ -316,11 +316,15 @@ wss.on('connection', function(ws){
       }
     }else if(data.hasOwnProperty('is_continue')){
       if(data.is_continue.hasOwnProperty('result')){
-        if(data.is_continue.result == "true" && data.is_continue.hasOwnProperty('trolley_id')){
-          actions.getNextQuiz(Trolley,data.is_continue.trolley_id,quizes,function(tr){
-            var sendData = {};
-            sendData.trolley = tr;
-            ws.send(JSON.stringify(sendData));
+        if(data.is_continue.result == "true" && data.is_continue.hasOwnProperty('user_id')){
+          User.findOne({ _id: user_id },function(err, user){
+            if(!err && user){
+              actions.getNextQuiz(Trolley,user.trolley_id,quizes,function(tr){
+                var sendData = {};
+                sendData.trolley = tr;
+                ws.send(JSON.stringify(sendData));
+              });
+            }else console.log("err finding user");
           });
         }else if(data.is_continue.hasOwnProperty('user_id')){
           User.findOne({ _id: user_id },function(err, user){
