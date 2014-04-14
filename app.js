@@ -331,6 +331,7 @@ wss.on('connection', function(ws){
                   trolley.save(function(err){
                     if(err) console.log(err);
                     else{
+                      var sendData = {};
                       sendData.users = [user];
                       var done = 0;
                       for(var i = 0; i < trolley.users.length; i++){
