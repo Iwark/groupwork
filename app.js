@@ -221,6 +221,8 @@ wss.on('connection', function(ws){
                     if(err) console.log("err saving user ...");
                   });
                   trolley.current_time = Date.now();
+                  if(trolley.corrects + trolley.wrongs == trolley.users.length && trolley.corrects <= trolley.users.length / 2)
+                    trolley.state = 2;
                   trolley.save(function(err){
                     if(!err){
                       if(trolley.corrects + trolley.wrongs == trolley.users.length){
@@ -319,10 +321,38 @@ wss.on('connection', function(ws){
         if(data.is_continue.result == "true" && data.is_continue.hasOwnProperty('user_id')){
           User.findOne({ _id: data.is_continue.user_id },function(err, user){
             if(!err && user){
-              actions.getNextQuiz(Trolley,user.trolley_id,quizes,function(tr){
-                var sendData = {};
-                sendData.trolley = tr;
-                ws.send(JSON.stringify(sendData));
+              Trolley.findOne({ _id: user.trolley_id}, function(err, trolley){
+                if(!err && trolley){
+                  if(trolley.state == 2){
+                    trolley.state = 1;
+                    trolley.users = [user._id];
+                  }
+                  trolley.current_time = Date.now();
+                  trolley.save(function(err){
+                    if(err) console.log(err);
+                    else{
+                      sendData.users = [user];
+                      var done = 0;
+                      for(var i = 0; i < trolley.users.length; i++){
+                        User.findOne({ _id: trolley.users[i]}, function(err, u){
+                          if(!err && u){
+                            if(u !== user) sendData.users.push(u);
+                            done ++;
+                            if(done == trolley.users.length){
+                              actions.getNextQuiz(Trolley,user.trolley_id,quizes,function(tr){
+                                sendData.trolley = tr;
+                                ws.send(JSON.stringify(sendData));
+                              });
+                              console.log("sending::" + JSON.stringify(sendData));
+                            }
+                          }
+                        });
+                      }
+                    }
+                  });
+                }else{
+                  console.log('error findOneTrolley: '+err);
+                }
               });
             }else console.log("err finding user");
           });
