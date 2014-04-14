@@ -343,8 +343,9 @@ wss.on('connection', function(ws){
                               actions.getNextQuiz(Trolley,user.trolley_id,quizes,function(tr){
                                 sendData.trolley = tr;
                                 ws.send(JSON.stringify(sendData));
+                                console.log("sending::" + JSON.stringify(sendData));
                               });
-                              console.log("sending::" + JSON.stringify(sendData));
+                              break;
                             }
                           }
                         });
