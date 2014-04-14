@@ -327,7 +327,6 @@ wss.on('connection', function(ws){
                     trolley.state = 1;
                     trolley.users = [user._id];
                   }
-                  trolley.current_time = Date.now();
                   trolley.save(function(err){
                     if(err) console.log(err);
                     else{

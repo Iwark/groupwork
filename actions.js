@@ -71,6 +71,7 @@ module.exports={
         trolley.corrects = 0;
         trolley.correct_way = Math.floor(Math.random()*2+1);
         trolley.current_num++;
+        trolley.current_time = Date.now();
         trolley.updated_at = Date.now();
         trolley.quiz = quiz;
         trolley.save(function(err){
