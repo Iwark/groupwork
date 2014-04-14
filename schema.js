@@ -29,7 +29,7 @@ var TrolleySchema = new Schema({
   correct_way: {type: Number, default:0},         //正解ルート 左:1 右:2                                     
   history: [Number],                                //クイズ出題履歴（quiz.index）
   corrects: {type: Number, default:0},            //その問題の正答数
-  wrongs: {type:Number, default:0}                //その問題の誤答数
+  wrongs: {type:Number, default:0},               //その問題の誤答数
   state: {type:Number, default:1}                 //状態(2: コンティニュー待ち)
 });
 
