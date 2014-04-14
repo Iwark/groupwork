@@ -345,7 +345,6 @@ wss.on('connection', function(ws){
                                 ws.send(JSON.stringify(sendData));
                                 console.log("sending::" + JSON.stringify(sendData));
                               });
-                              break;
                             }
                           }
                         });
